@@ -18,5 +18,8 @@ module.exports = (config) => {
     })
   );
 
+  if (!config.ignoreWarnings) config.ignoreWarnings = [];
+  config.ignoreWarnings.push(/Failed to parse source map/);
+
   return config;
 };
