@@ -12,6 +12,7 @@ import { utils, Waku, WakuMessage } from "js-waku";
 import { PrivateMessage } from "./wire";
 import { PrivateMessageContentTopic } from "../waku";
 import * as sigUtil from "eth-sig-util";
+import { ethers } from "ethers";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -37,6 +38,7 @@ export default function SendMessage({ waku, recipients, address, providerRequest
   const classes = useStyles();
   const [recipient, setRecipient] = useState<string>("");
   const [message, setMessage] = useState<string>();
+  const [amountInEther, setAmountInEther] = useState<string>("0.0");
 
   const handleRecipientChange = (
     event: ChangeEvent<{ name?: string; value: unknown }>
@@ -89,7 +91,7 @@ export default function SendMessage({ waku, recipients, address, providerRequest
           {
             from: address,
             to: recipient,
-            value: '0x01',
+            value: ethers.utils.parseEther(amountInEther).toHexString(),
             // value: '0x29a2241af62c0000',
             // gasPrice: '0x09184e72a000',
             // gas: '0x2710',
@@ -126,6 +128,18 @@ export default function SendMessage({ waku, recipients, address, providerRequest
         onChange={handleMessageChange}
         onKeyDown={keyDownHandler}
         value={message}
+      />
+      <TextField
+        type="number"
+        value={amountInEther}
+        inputProps={{
+          maxLength: 150,
+          min: 0,
+          inputMode: "numeric",
+          pattern: '[0-9]*',
+          step: "any",
+        }}
+        onChange={(e) => setAmountInEther(e.target.value)}
       />
       <Button
         onClick={handleSendEthButton}
