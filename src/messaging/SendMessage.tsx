@@ -1,4 +1,5 @@
 import {
+  Button,
   FormControl,
   InputLabel,
   makeStyles,
@@ -26,9 +27,13 @@ export interface Props {
   waku: Waku | undefined;
   // address, public key
   recipients: Map<string, Uint8Array>;
+  address: string | undefined;
+  providerRequest:
+    | ((request: { method: string; params?: Array<any> }) => Promise<any>)
+    | undefined;
 }
 
-export default function SendMessage({ waku, recipients }: Props) {
+export default function SendMessage({ waku, recipients, address, providerRequest }: Props) {
   const classes = useStyles();
   const [recipient, setRecipient] = useState<string>("");
   const [message, setMessage] = useState<string>();
@@ -73,6 +78,28 @@ export default function SendMessage({ waku, recipients }: Props) {
     }
   };
 
+  const handleSendEthButton = () => {
+    if (providerRequest === undefined) return;
+    if (!recipient) return;
+    if (!address) return;
+
+    providerRequest({
+        method: 'eth_sendTransaction',
+        params: [
+          {
+            from: address,
+            to: recipient,
+            value: '0x01',
+            // value: '0x29a2241af62c0000',
+            // gasPrice: '0x09184e72a000',
+            // gas: '0x2710',
+          },
+        ],
+      })
+      .then((txHash) => console.log(txHash))
+      .catch((error) => console.error);
+  };
+
   return (
     <div
       style={{
@@ -100,6 +127,9 @@ export default function SendMessage({ waku, recipients }: Props) {
         onKeyDown={keyDownHandler}
         value={message}
       />
+      <Button
+        onClick={handleSendEthButton}
+      >Send money!</Button>
     </div>
   );
 }

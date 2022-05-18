@@ -217,7 +217,8 @@ function App() {
                 recipients={publicKeys}
                 waku={waku}
                 messages={messages}
-              />
+                address={address}
+                providerRequest={provider?.provider?.request}              />
             </fieldset>
           </main>
         </div>
