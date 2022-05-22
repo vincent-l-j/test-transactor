@@ -9,6 +9,7 @@ import {
 } from "@material-ui/core/styles";
 import { lightBlue, blueGrey, teal } from "@material-ui/core/colors";
 import WifiIcon from "@material-ui/icons/Wifi";
+import BroadcastPublicKey from "./BroadcastPublicKey";
 import {
   initWaku,
 } from "./waku";
@@ -56,7 +57,7 @@ const useStyles = makeStyles({
 function App() {
   const [waku, setWaku] = useState<Waku>();
   const [provider, setProvider] = useState<Web3Provider>();
-  const [, setEncPublicKey] = useState<Uint8Array>();
+  const [encPublicKey, setEncPublicKey] = useState<Uint8Array>();
   const [address, setAddress] = useState<string>();
   const [peerStats, setPeerStats] = useState<{
     relayPeers: number;
@@ -145,6 +146,12 @@ function App() {
                 setEncPublicKey={setEncPublicKey}
                 providerRequest={provider?.provider?.request}
                 address={address}
+              />
+              <BroadcastPublicKey
+                address={address}
+                encryptionPublicKey={encPublicKey}
+                waku={waku}
+                providerRequest={provider?.provider?.request}
               />
             </fieldset>
           </main>

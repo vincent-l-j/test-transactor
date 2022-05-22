@@ -1,5 +1,8 @@
 import { Waku } from "js-waku";
 
+export const PublicKeyContentTopic =
+  "/eth-pm-wallet/1/encryption-public-key/proto";
+
 export async function initWaku(): Promise<Waku> {
   const waku = await Waku.create({ bootstrap: { default: true } });
 
