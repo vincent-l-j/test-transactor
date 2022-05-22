@@ -9,6 +9,9 @@ import {
 } from "@material-ui/core/styles";
 import { lightBlue, blueGrey } from "@material-ui/core/colors";
 import WifiIcon from "@material-ui/icons/Wifi";
+import {
+  initWaku,
+} from "./waku";
 import { Web3Provider } from "@ethersproject/providers/src.ts/web3-provider";
 import GetEncryptionPublicKey from "./GetEncryptionPublicKey";
 import ConnectWallet from "./ConnectWallet";
