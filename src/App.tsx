@@ -7,7 +7,7 @@ import {
   ThemeProvider,
   makeStyles,
 } from "@material-ui/core/styles";
-import { lightBlue, blueGrey } from "@material-ui/core/colors";
+import { lightBlue, blueGrey, teal } from "@material-ui/core/colors";
 import WifiIcon from "@material-ui/icons/Wifi";
 import {
   initWaku,
@@ -88,8 +88,8 @@ function App() {
               aria-label="waku-status"
             >
               <WifiIcon
-                color={"disabled"}
-                style={{}}
+                color={waku ? undefined : "disabled"}
+                style={waku ? { color: teal[500] } : {}}
               />
             </IconButton>
             <Typography variant="h6" className={classes.title}>
