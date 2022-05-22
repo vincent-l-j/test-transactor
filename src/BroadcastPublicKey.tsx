@@ -56,7 +56,7 @@ export default function BroadcastPublicKey({
       onClick={broadcastPublicKey}
       disabled={!encryptionPublicKey || !waku || !address || !providerRequest}
     >
-      Broadcast Encryption Public Key
+      Step 3: Broadcast Encryption Public Key
     </Button>
   );
 }

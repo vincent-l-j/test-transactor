@@ -27,7 +27,7 @@ export default function ConnectWallet({ setAddress, setProvider }: Props) {
 
   return (
     <Button variant="contained" color="primary" onClick={connectWallet}>
-      Connect Wallet
+      Step 1: Connect Wallet
     </Button>
   );
 }

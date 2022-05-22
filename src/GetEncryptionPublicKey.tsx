@@ -50,7 +50,7 @@ export default function GetEncryptionPublicKey({
       onClick={requestPublicKey}
       disabled={!providerRequest || !address}
     >
-      Get Encryption Public Key from Wallet
+      Step 2: Get Encryption Public Key from Wallet
     </Button>
   );
 }

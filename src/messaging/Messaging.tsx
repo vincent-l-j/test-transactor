@@ -27,6 +27,9 @@ export default function Messaging({ waku, recipients, messages, address, provide
 
   return (
     <div className={classes.root}>
+      <div>
+        Step 4: Send a <del>test transaction</del> message to confirm the address
+      </div>
       <SendMessage recipients={recipients} waku={waku} address={address} providerRequest={providerRequest}/>
       <Messages messages={messages} />
     </div>

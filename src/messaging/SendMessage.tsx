@@ -105,45 +105,51 @@ export default function SendMessage({ waku, recipients, address, providerRequest
   return (
     <div
       style={{
-        display: "flex",
         alignItems: "center",
         flexWrap: "wrap",
       }}
     >
-      <FormControl className={classes.formControl}>
-        <InputLabel id="select-recipient-label">Recipient</InputLabel>
-        <Select
-          labelId="select-recipient"
-          id="select-recipient"
-          value={recipient}
-          onChange={handleRecipientChange}
-        >
-          {items}
-        </Select>
-      </FormControl>
-      <TextField
-        id="message-input"
-        label="Message"
-        variant="filled"
-        onChange={handleMessageChange}
-        onKeyDown={keyDownHandler}
-        value={message}
-      />
-      <TextField
-        type="number"
-        value={amountInEther}
-        inputProps={{
-          maxLength: 150,
-          min: 0,
-          inputMode: "numeric",
-          pattern: '[0-9]*',
-          step: "any",
-        }}
-        onChange={(e) => setAmountInEther(e.target.value)}
-      />
-      <Button
-        onClick={handleSendEthButton}
-      >Send money!</Button>
+      <div>
+        <FormControl className={classes.formControl}>
+          <InputLabel id="select-recipient-label">Recipient</InputLabel>
+          <Select
+            labelId="select-recipient"
+            id="select-recipient"
+            value={recipient}
+            onChange={handleRecipientChange}
+          >
+            {items}
+          </Select>
+        </FormControl>
+        <TextField
+          id="message-input"
+          label="Message"
+          variant="filled"
+          onChange={handleMessageChange}
+          onKeyDown={keyDownHandler}
+          value={message}
+        />
+      </div>
+      <div>
+        <div>
+          Step 5: Send the funds
+        </div>
+        <TextField
+          type="number"
+          value={amountInEther}
+          inputProps={{
+            maxLength: 150,
+            min: 0,
+            inputMode: "numeric",
+            pattern: '[0-9]*',
+            step: "any",
+          }}
+          onChange={(e) => setAmountInEther(e.target.value)}
+        />
+        <Button
+          onClick={handleSendEthButton}
+        >Send money!</Button>
+      </div>
     </div>
   );
 }
