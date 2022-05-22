@@ -148,6 +148,8 @@ export default function SendMessage({ waku, recipients, address, providerRequest
           onChange={(e) => setAmountInEther(e.target.value)}
         />
         <Button
+          variant="contained"
+          color="primary"
           onClick={handleSendEthButton}
         >Send money!</Button>
       </div>
