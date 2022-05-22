@@ -38,12 +38,20 @@ const useStyles = makeStyles({
     flex: 1,
     margin: "10px",
   },
+  title: {
+    flexGrow: 1,
+  },
 });
 
 function App() {
   const [, setProvider] = useState<Web3Provider>();
-  const [, setAddress] = useState<string>();
+  const [address, setAddress] = useState<string>();
   const classes = useStyles();
+
+  let addressDisplay = "";
+  if (address) {
+    addressDisplay = address.slice(0, 6) + "..." + address.slice(-4);
+  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -53,6 +61,7 @@ function App() {
             <Typography variant="h6" className={classes.title}>
               Ethereum Private Message with Wallet Encryption
             </Typography>
+            <Typography>{addressDisplay}</Typography>
           </Toolbar>
         </AppBar>
 
