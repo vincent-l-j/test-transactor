@@ -50,6 +50,7 @@ const useStyles = makeStyles({
   title: {
     flexGrow: 1,
   },
+  peers: {},
 });
 
 function App() {
@@ -57,6 +58,14 @@ function App() {
   const [provider, setProvider] = useState<Web3Provider>();
   const [, setEncPublicKey] = useState<Uint8Array>();
   const [address, setAddress] = useState<string>();
+  const [peerStats, setPeerStats] = useState<{
+    relayPeers: number;
+    lightPushPeers: number;
+  }>({
+    relayPeers: 0,
+    lightPushPeers: 0,
+  });
+
   const classes = useStyles();
 
   // Waku initialization
@@ -70,6 +79,24 @@ function App() {
       .catch((e) => {
         console.error("Failed to initiate Waku", e);
       });
+  }, [waku]);
+
+  useEffect(() => {
+    if (!waku) return;
+
+    const interval = setInterval(async () => {
+      let lightPushPeers = 0;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      for await (const _peer of waku.store.peers) {
+        lightPushPeers++;
+      }
+
+      setPeerStats({
+        relayPeers: waku.relay.getPeers().size,
+        lightPushPeers,
+      });
+    }, 1000);
+    return () => clearInterval(interval);
   }, [waku]);
 
   let addressDisplay = "";
@@ -92,6 +119,10 @@ function App() {
                 style={waku ? { color: teal[500] } : {}}
               />
             </IconButton>
+            <Typography className={classes.peers} aria-label="connected-peers">
+              Peers: {peerStats.relayPeers} relay, {peerStats.lightPushPeers}{" "}
+              light push
+            </Typography>
             <Typography variant="h6" className={classes.title}>
               Ethereum Private Message with Wallet Encryption
             </Typography>
