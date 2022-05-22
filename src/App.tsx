@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './App.css';
-import { AppBar, Toolbar } from "@material-ui/core";
+import { AppBar, Toolbar, Typography } from "@material-ui/core";
 import {
   createTheme,
   ThemeProvider,
@@ -50,6 +50,9 @@ function App() {
       <div className={classes.root}>
         <AppBar className={classes.appBar} position="static">
           <Toolbar>
+            <Typography variant="h6" className={classes.title}>
+              Ethereum Private Message with Wallet Encryption
+            </Typography>
           </Toolbar>
         </AppBar>
 
