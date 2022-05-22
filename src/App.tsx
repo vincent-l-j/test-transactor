@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import { Waku } from "js-waku";
 import { AppBar, IconButton, Toolbar, Typography } from "@material-ui/core";
@@ -50,10 +50,16 @@ const useStyles = makeStyles({
 });
 
 function App() {
+  const [waku, ] = useState<Waku>();
   const [provider, setProvider] = useState<Web3Provider>();
   const [, setEncPublicKey] = useState<Uint8Array>();
   const [address, setAddress] = useState<string>();
   const classes = useStyles();
+
+  // Waku initialization
+  useEffect(() => {
+    if (waku) return;
+  }, [waku]);
 
   let addressDisplay = "";
   if (address) {
