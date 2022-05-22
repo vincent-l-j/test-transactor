@@ -196,17 +196,21 @@ function App() {
             </fieldset>
             <fieldset>
               <legend>Encryption Keys</legend>
-              <GetEncryptionPublicKey
-                setEncPublicKey={setEncPublicKey}
-                providerRequest={provider?.provider?.request}
-                address={address}
-              />
-              <BroadcastPublicKey
-                address={address}
-                encryptionPublicKey={encPublicKey}
-                waku={waku}
-                providerRequest={provider?.provider?.request}
-              />
+              <div>
+                <GetEncryptionPublicKey
+                  setEncPublicKey={setEncPublicKey}
+                  providerRequest={provider?.provider?.request}
+                  address={address}
+                />
+              </div>
+              <div>
+                <BroadcastPublicKey
+                  address={address}
+                  encryptionPublicKey={encPublicKey}
+                  waku={waku}
+                  providerRequest={provider?.provider?.request}
+                />
+              </div>
             </fieldset>
             <fieldset>
               <legend>Messaging</legend>
