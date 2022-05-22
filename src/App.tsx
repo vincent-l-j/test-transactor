@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import './App.css';
-import { AppBar, Toolbar, Typography } from "@material-ui/core";
+import { AppBar, IconButton, Toolbar, Typography } from "@material-ui/core";
 import {
   createTheme,
   ThemeProvider,
   makeStyles,
 } from "@material-ui/core/styles";
 import { lightBlue, blueGrey } from "@material-ui/core/colors";
+import WifiIcon from "@material-ui/icons/Wifi";
 import { Web3Provider } from "@ethersproject/providers/src.ts/web3-provider";
 import GetEncryptionPublicKey from "./GetEncryptionPublicKey";
 import ConnectWallet from "./ConnectWallet";
@@ -39,6 +40,9 @@ const useStyles = makeStyles({
     flex: 1,
     margin: "10px",
   },
+  wakuStatus: {
+    marginRight: theme.spacing(2),
+  },
   title: {
     flexGrow: 1,
   },
@@ -60,6 +64,16 @@ function App() {
       <div className={classes.root}>
         <AppBar className={classes.appBar} position="static">
           <Toolbar>
+            <IconButton
+              edge="start"
+              className={classes.wakuStatus}
+              aria-label="waku-status"
+            >
+              <WifiIcon
+                color={"disabled"}
+                style={{}}
+              />
+            </IconButton>
             <Typography variant="h6" className={classes.title}>
               Ethereum Private Message with Wallet Encryption
             </Typography>
