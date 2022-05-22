@@ -11,7 +11,9 @@ import { lightBlue, blueGrey, teal } from "@material-ui/core/colors";
 import WifiIcon from "@material-ui/icons/Wifi";
 import BroadcastPublicKey from "./BroadcastPublicKey";
 import {
+  handlePublicKeyMessage,
   initWaku,
+  PublicKeyContentTopic,
 } from "./waku";
 import { Web3Provider } from "@ethersproject/providers/src.ts/web3-provider";
 import GetEncryptionPublicKey from "./GetEncryptionPublicKey";
@@ -58,6 +60,9 @@ function App() {
   const [waku, setWaku] = useState<Waku>();
   const [provider, setProvider] = useState<Web3Provider>();
   const [encPublicKey, setEncPublicKey] = useState<Uint8Array>();
+  const [, setPublicKeys] = useState<Map<string, Uint8Array>>(
+    new Map()
+  );
   const [address, setAddress] = useState<string>();
   const [peerStats, setPeerStats] = useState<{
     relayPeers: number;
@@ -81,6 +86,25 @@ function App() {
         console.error("Failed to initiate Waku", e);
       });
   }, [waku]);
+
+  useEffect(() => {
+    if (!waku) return;
+
+    const observerPublicKeyMessage = handlePublicKeyMessage.bind(
+      {},
+      address,
+      setPublicKeys
+    );
+
+    waku.relay.addObserver(observerPublicKeyMessage, [PublicKeyContentTopic]);
+
+    return function cleanUp() {
+      if (!waku) return;
+      waku.relay.deleteObserver(observerPublicKeyMessage, [
+        PublicKeyContentTopic,
+      ]);
+    };
+  }, [waku, address]);
 
   useEffect(() => {
     if (!waku) return;

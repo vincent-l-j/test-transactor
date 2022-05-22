@@ -1,5 +1,7 @@
 import { PublicKeyMessage } from "./messaging/wire";
 import { utils } from "js-waku";
+import * as sigUtil from "eth-sig-util";
+import { equals } from "uint8arrays/equals";
 
 /**
  * Sign the encryption public key with Web3. This can then be published to let other
@@ -78,4 +80,24 @@ export async function signEncryptionKey(
   console.log("TYPED SIGNED:" + JSON.stringify(result));
 
   return utils.hexToBytes(result);
+}
+
+/**
+ * Validate that the Encryption Public Key was signed by the holder of the given Ethereum address.
+ */
+export function validatePublicKeyMessage(msg: PublicKeyMessage): boolean {
+  const recovered = sigUtil.recoverTypedSignature_v4({
+    data: JSON.parse(
+      buildMsgParams(
+        msg.encryptionPublicKey,
+        "0x" + utils.bytesToHex(msg.ethAddress)
+      )
+    ),
+    sig: "0x" + utils.bytesToHex(msg.signature),
+  });
+
+  console.log("Recovered", recovered);
+  console.log("ethAddress", "0x" + utils.bytesToHex(msg.ethAddress));
+
+  return equals(utils.hexToBytes(recovered), msg.ethAddress);
 }

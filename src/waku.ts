@@ -1,4 +1,8 @@
-import { Waku } from "js-waku";
+import { Dispatch, SetStateAction } from "react";
+import { utils, Waku, WakuMessage } from "js-waku";
+import { PublicKeyMessage } from "./messaging/wire";
+import { validatePublicKeyMessage } from "./crypto";
+import { equals } from "uint8arrays/equals";
 
 export const PublicKeyContentTopic =
   "/eth-pm-wallet/1/encryption-public-key/proto";
@@ -18,4 +22,30 @@ export async function initWaku(): Promise<Waku> {
   });
 
   return waku;
+}
+
+export function handlePublicKeyMessage(
+  myAddress: string | undefined,
+  setPublicKeys: Dispatch<SetStateAction<Map<string, Uint8Array>>>,
+  msg: WakuMessage
+) {
+  console.log("Public Key Message received:", msg);
+  if (!msg.payload) return;
+  const publicKeyMsg = PublicKeyMessage.decode(msg.payload);
+  if (!publicKeyMsg) return;
+  if (myAddress && equals(publicKeyMsg.ethAddress, utils.hexToBytes(myAddress)))
+    return;
+
+  const res = validatePublicKeyMessage(publicKeyMsg);
+  console.log("Is Public Key Message valid?", res);
+
+  if (res) {
+    setPublicKeys((prevPks: Map<string, Uint8Array>) => {
+      prevPks.set(
+        utils.bytesToHex(publicKeyMsg.ethAddress),
+        publicKeyMsg.encryptionPublicKey
+      );
+      return new Map(prevPks);
+    });
+  }
 }
