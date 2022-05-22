@@ -62,6 +62,7 @@ function App() {
   // Waku initialization
   useEffect(() => {
     if (waku) return;
+    initWaku()
   }, [waku]);
 
   let addressDisplay = "";
