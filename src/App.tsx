@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './App.css';
+import { Waku } from "js-waku";
 import { AppBar, IconButton, Toolbar, Typography } from "@material-ui/core";
 import {
   createTheme,
