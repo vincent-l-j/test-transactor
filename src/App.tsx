@@ -53,7 +53,7 @@ const useStyles = makeStyles({
 });
 
 function App() {
-  const [waku, ] = useState<Waku>();
+  const [waku, setWaku] = useState<Waku>();
   const [provider, setProvider] = useState<Web3Provider>();
   const [, setEncPublicKey] = useState<Uint8Array>();
   const [address, setAddress] = useState<string>();
@@ -63,6 +63,13 @@ function App() {
   useEffect(() => {
     if (waku) return;
     initWaku()
+      .then((_waku) => {
+        console.log("waku: ready");
+        setWaku(_waku);
+      })
+      .catch((e) => {
+        console.error("Failed to initiate Waku", e);
+      });
   }, [waku]);
 
   let addressDisplay = "";
