@@ -8,6 +8,7 @@ import {
 } from "@material-ui/core/styles";
 import { lightBlue, blueGrey } from "@material-ui/core/colors";
 import { Web3Provider } from "@ethersproject/providers/src.ts/web3-provider";
+import GetEncryptionPublicKey from "./GetEncryptionPublicKey";
 import ConnectWallet from "./ConnectWallet";
 
 const theme = createTheme({
@@ -44,7 +45,8 @@ const useStyles = makeStyles({
 });
 
 function App() {
-  const [, setProvider] = useState<Web3Provider>();
+  const [provider, setProvider] = useState<Web3Provider>();
+  const [, setEncPublicKey] = useState<Uint8Array>();
   const [address, setAddress] = useState<string>();
   const classes = useStyles();
 
@@ -72,6 +74,14 @@ function App() {
               <ConnectWallet
                 setProvider={setProvider}
                 setAddress={setAddress}
+              />
+            </fieldset>
+            <fieldset>
+              <legend>Encryption Keys</legend>
+              <GetEncryptionPublicKey
+                setEncPublicKey={setEncPublicKey}
+                providerRequest={provider?.provider?.request}
+                address={address}
               />
             </fieldset>
           </main>
