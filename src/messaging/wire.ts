@@ -58,3 +58,44 @@ export class PublicKeyMessage {
     return this.payload.signature;
   }
 }
+
+export interface PrivateMessagePayload {
+  toAddress: Uint8Array;
+  message: string;
+}
+
+/**
+ * Encrypted Message used for private communication over the Waku network.
+ */
+export class PrivateMessage {
+  private static Type = new Type("PrivateMessage")
+    .add(new Field("toAddress", 1, "bytes"))
+    .add(new Field("message", 2, "string"));
+  private static Root = new Root().define("messages").add(PrivateMessage.Type);
+
+  constructor(public payload: PrivateMessagePayload) {}
+
+  public encode(): Uint8Array {
+    const message = PrivateMessage.Type.create(this.payload);
+    return PrivateMessage.Type.encode(message).finish();
+  }
+
+  public static decode(bytes: Uint8Array | Buffer): PrivateMessage | undefined {
+    const payload = PrivateMessage.Type.decode(
+      bytes
+    ) as unknown as PrivateMessagePayload;
+    if (!payload.toAddress || !payload.message) {
+      console.log("Field missing on decoded PrivateMessage", payload);
+      return;
+    }
+    return new PrivateMessage(payload);
+  }
+
+  get toAddress(): Uint8Array {
+    return this.payload.toAddress;
+  }
+
+  get message(): string {
+    return this.payload.message;
+  }
+}

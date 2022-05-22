@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
 import { Waku } from "js-waku";
+import { Message } from "./messaging/Messages";
 import { AppBar, IconButton, Toolbar, Typography } from "@material-ui/core";
 import {
   createTheme,
@@ -10,7 +11,10 @@ import {
 import { lightBlue, blueGrey, teal } from "@material-ui/core/colors";
 import WifiIcon from "@material-ui/icons/Wifi";
 import BroadcastPublicKey from "./BroadcastPublicKey";
+import Messaging from "./messaging/Messaging";
 import {
+  PrivateMessageContentTopic,
+  handlePrivateMessage,
   handlePublicKeyMessage,
   initWaku,
   PublicKeyContentTopic,
@@ -60,9 +64,10 @@ function App() {
   const [waku, setWaku] = useState<Waku>();
   const [provider, setProvider] = useState<Web3Provider>();
   const [encPublicKey, setEncPublicKey] = useState<Uint8Array>();
-  const [, setPublicKeys] = useState<Map<string, Uint8Array>>(
+  const [publicKeys, setPublicKeys] = useState<Map<string, Uint8Array>>(
     new Map()
   );
+  const [messages, setMessages] = useState<Message[]>([]);
   const [address, setAddress] = useState<string>();
   const [peerStats, setPeerStats] = useState<{
     relayPeers: number;
@@ -105,6 +110,31 @@ function App() {
       ]);
     };
   }, [waku, address]);
+
+  useEffect(() => {
+    if (!waku) return;
+    if (!address) return;
+    if (!provider?.provider?.request) return;
+
+    const observerPrivateMessage = handlePrivateMessage.bind(
+      {},
+      setMessages,
+      address,
+      provider.provider.request
+    );
+
+    waku.relay.addObserver(observerPrivateMessage, [
+      PrivateMessageContentTopic,
+    ]);
+
+    return function cleanUp() {
+      if (!waku) return;
+      if (!observerPrivateMessage) return;
+      waku.relay.deleteObserver(observerPrivateMessage, [
+        PrivateMessageContentTopic,
+      ]);
+    };
+  }, [waku, address, provider?.provider?.request]);
 
   useEffect(() => {
     if (!waku) return;
@@ -176,6 +206,14 @@ function App() {
                 encryptionPublicKey={encPublicKey}
                 waku={waku}
                 providerRequest={provider?.provider?.request}
+              />
+            </fieldset>
+            <fieldset>
+              <legend>Messaging</legend>
+              <Messaging
+                recipients={publicKeys}
+                waku={waku}
+                messages={messages}
               />
             </fieldset>
           </main>
