@@ -179,7 +179,7 @@ function App() {
               light push
             </Typography>
             <Typography variant="h6" className={classes.title}>
-              Ethereum Private Message with Wallet Encryption
+              Test Transactor
             </Typography>
             <Typography>{addressDisplay}</Typography>
           </Toolbar>
