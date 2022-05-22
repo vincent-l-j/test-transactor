@@ -136,6 +136,7 @@ export default function SendMessage({ waku, recipients, address, providerRequest
         </div>
         <TextField
           type="number"
+          label="Amount in ETH"
           value={amountInEther}
           inputProps={{
             maxLength: 150,
